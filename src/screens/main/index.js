@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import {View, Text, StyleSheet, TextInput} from "react-native";
+import {View, Text, Button, StyleSheet, TextInput} from "react-native";
 import TodoList from "../../components/ToDo List";
-import { getTodos } from "../../data/todos";
+import { getTodos, updateToDo, addTodo, newTodo, deleteTodo} from "../../data/todos";
 
 const styles = StyleSheet.create({
     container: {
@@ -23,6 +23,17 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: 'center',
     },
+    buttonRow:{
+        width: "80%",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        color: "black",
+        maxWidth: "80%"
+    },
+    addButton: {
+        color: "white",
+        backgroundColor: "black"
+    }
   });
 
 class MainScreen extends Component {
@@ -31,7 +42,7 @@ class MainScreen extends Component {
 
         this.state = {
             todos: [],
-            newToDo: null,
+            newTodo: null,
         };
     }
 
@@ -39,20 +50,33 @@ class MainScreen extends Component {
         this.setState({todos:getTodos()});
     }
 
+    handleAdd = () => {
+        const {todos, newTodo} = this.state;
+        const newList = addTodo(todos, {text: newTodo});
+        this.setState({todos: newList, newTodo: null});
+    }
+
     render() {
-        const {todos, newToDo} = this.state;
+        const {todos, newTodo} = this.state;
         return(
             <View style={styles.container}>
                 <Text style={styles.title}>To-do list</Text>
+                <View style={styles.buttonRow}>
                 <TextInput 
-                    style={styles.text}
+                    //style={}
                     placeholder="Nueva tarea: "
-                    value={newToDo}
-                    onChangeText={todo => this.setState({newToDo: todo})}
+                    value={newTodo}
+                    onChangeText={todo => this.setState({newTodo: todo})}
                     autoCapitalize="sentences"
                     clearButtonMode="always"
                     returnKeyType="done"
                 />
+                <Button 
+                    title="Añadir"
+                    style={styles.addButton}
+                    onPress={this.handleAdd}
+                />
+                </View>
                 <TodoList todos={todos} />
             </View>
         )
