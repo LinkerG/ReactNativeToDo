@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {SafeAreaView, View, Text, StyleSheet} from "react-native";
+import {View, Text, StyleSheet, TextInput} from "react-native";
 import TodoList from "../../components/ToDo List";
 import { getTodos } from "../../data/todos";
 
@@ -14,7 +14,15 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: "bold",
         fontSize: 20
-    }
+    },
+    text:{
+        padding:4,
+        fontWeight: 'bold',
+        borderWidth: 1,
+        width:'80%',
+        flexDirection: "row",
+        alignItems: 'center',
+    },
   });
 
 class MainScreen extends Component {
@@ -22,7 +30,8 @@ class MainScreen extends Component {
         super(props)
 
         this.state = {
-            todos: []
+            todos: [],
+            newToDo: null,
         };
     }
 
@@ -31,11 +40,20 @@ class MainScreen extends Component {
     }
 
     render() {
-        const {todos} = this.state;
+        const {todos, newToDo} = this.state;
         return(
             <View style={styles.container}>
                 <Text style={styles.title}>To-do list</Text>
-                <TodoList todos={this.state.todos}/>
+                <TextInput 
+                    style={styles.text}
+                    placeholder="Nueva tarea: "
+                    value={newToDo}
+                    onChangeText={todo => this.setState({newToDo: todo})}
+                    autoCapitalize="sentences"
+                    clearButtonMode="always"
+                    returnKeyType="done"
+                />
+                <TodoList todos={todos} />
             </View>
         )
     }
